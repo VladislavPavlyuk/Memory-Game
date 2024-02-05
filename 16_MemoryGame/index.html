@@ -8,24 +8,25 @@
         <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
-        <link rel="manifest" href="favicon/site.webmanifest">
+
 
         <link rel="stylesheet" href="assets/styles.css" />
         <script src="assets/game.js" defer></script>
     </head>
     <body>
         <div class="game">
+            <div class="board-container">
+                <div class="board" data-dimension="4"></div>
+                <div class="win">Поздравляю с Победой!!</div>
+            </div> \<br>
             <div class="controls">
-                <button>Старт</button>
+                <button class="start">Старт</button>
                 <div class="stats">
                     <div class="moves">Выполнено 0 попыток </div>
                     <div class="timer">Затрачено времени: 0 секунд</div>
                 </div>
-            </div>
-            <div class="board-container">
-                <div class="board" data-dimension="4"></div>
-                <div class="win">Поздравляю с Победой!!</div>
-            </div>
+                <button class="stop">Стоп</button>
+            </div>            
         </div>
     </body>
 </html>

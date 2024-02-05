@@ -3,7 +3,8 @@ const selectors = {
     board: document.querySelector('.board'),
     moves: document.querySelector('.moves'),
     timer: document.querySelector('.timer'),
-    start: document.querySelector('button'),
+    start: document.querySelector('.start'),
+    stop: document.querySelector('.stop'),
     win: document.querySelector('.win')
 }
 
@@ -34,6 +35,7 @@ const pickRandom = (array, items) => {
     const randomPicks = []
 
     for (let index = 0; index < items; index++) {
+
         const randomIndex = Math.floor(Math.random() * clonedArray.length)
         
         randomPicks.push(clonedArray[randomIndex])
@@ -49,7 +51,7 @@ const generateGame = () => {
     const dimensions = selectors.board.getAttribute('data-dimension')
 
     if (dimensions % 2 !== 0) {
-        throw new Error("Количество клеток должно быть четное количество")
+        throw new Error("Количество клеток должно быть четным")
     }
 
     const images = ['img/1.png',
@@ -75,17 +77,6 @@ const generateGame = () => {
             `).join('')}
        </div>
     `
-
-    const showCards = `
-    <div class="board" style="grid-template-columns: repeat(${dimensions}, auto)">
-        ${items.map(item => `
-            <div class="card-main" value="0">
-                <div class="card-front"></div>
-                <div class="card-back"><img class="card-main" src="${item}"></div>
-            </div>
-        `).join('')}
-   </div>
-`
     
     const parser = new DOMParser().parseFromString(cards, 'text/html')
 
@@ -93,11 +84,17 @@ const generateGame = () => {
 }
 
 const stopGame = () => {
+    state.gameStarted = false
+    selectors.start.classList.add('enabled')
+    selectors.stop.classList.add('disabled')
 
+    card.classList.add('flipped');
 }
+
 const startGame = () => {
     state.gameStarted = true
     selectors.start.classList.add('disabled')
+    selectors.stop.classList.add('enabled')
  
     state.loop = setInterval(() => {
         state.totalTime++
@@ -172,10 +169,11 @@ const attachEventListeners = () => {
 
         if (eventTarget.className.includes('card') && !eventParent.className.includes('flipped')) {
             flipCard(eventParent)
-        } else if (eventTarget.nodeName === 'START' && !eventTarget.className.includes('disabled')) {
+        } else if (eventTarget.className.includes('start') && !eventTarget.className.includes('disabled')) {
             startGame()
-        } else if (eventTarget.nodeName === 'STOP' && !eventTarget.className.includes('disabled')) {
+        } else if (eventTarget.className.includes('stop') && !eventTarget.className.includes('enabled')) {
             stopGame()
+        }
         })
 }
 

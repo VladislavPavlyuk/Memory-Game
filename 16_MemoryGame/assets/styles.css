@@ -18,7 +18,17 @@ html {
     margin-bottom: 20px;
 }
 
-button {
+.start {
+    background: black;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    border: 0;
+    cursor: pointer;
+    font-size: 18pt;
+}
+
+.stop {
     background: black;
     color: white;
     border-radius: 5px;
@@ -31,6 +41,10 @@ button {
 
 .disabled {
     color: #757575;
+}
+
+.enabled {
+    color: white;
 }
 
 .stats {
