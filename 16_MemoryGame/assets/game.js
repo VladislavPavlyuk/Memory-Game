@@ -3,8 +3,7 @@ const selectors = {
     board: document.querySelector('.board'),
     moves: document.querySelector('.moves'),
     timer: document.querySelector('.timer'),
-    start: document.querySelector('.start'),
-    stop: document.querySelector('.stop'),
+    button: document.querySelector('.button'),
     win: document.querySelector('.win')
 }
 
@@ -81,28 +80,36 @@ const generateGame = () => {
     const parser = new DOMParser().parseFromString(cards, 'text/html')
 
     selectors.board.replaceWith(parser.querySelector('.board'))
+    selectors.button.classList.add('stopped')
 }
 
 const stopGame = () => {
 
     state.gameStarted = false
-    selectors.start.classList.add('enabled')
-    selectors.stop.classList.add('disabled')
-
+    selectors.button.classList.remove('started')
+    selectors.button.classList.add('stopped')
+    selectors.button.innerText = 'Старт'
     flipBackAllCards();   
-
 }
 
 const startGame = () => {
     state.gameStarted = true
-    selectors.start.classList.add('disabled')
-    selectors.stop.classList.add('enabled')
- 
+    selectors.button.classList.remove('stopped')
+    selectors.button.classList.add('started')
+    selectors.button.innerText = 'Стоп'
+    state.totalTime = 0
+    state.totalFlips = 0
+    clearInterval(state.loop)
+
+    flipAllCards();
+
     state.loop = setInterval(() => {
         state.totalTime++
 
+        if (state.gameStarted){
         selectors.moves.innerText = `Выполнено ${state.totalFlips} попыток`
         selectors.timer.innerText = `Затрачено времени: ${state.totalTime} секунд`
+        }
     }, 1000)
 }
 
@@ -118,6 +125,13 @@ const flipBackAllCards = () => {
         card.classList.add('flipped')
     })
     state.flippedCards = 16
+}
+
+const flipAllCards = () => {
+    document.querySelectorAll('.card-main').forEach(card => {
+        card.classList.remove('flipped')
+    })
+    state.flippedCards = 0
 }
 
 
@@ -179,16 +193,23 @@ const attachEventListeners = () => {
         const eventParent = eventTarget.parentElement
 
         if (eventTarget.className.includes('card') && !eventParent.className.includes('flipped')) {
+
             flipCard(eventParent)
+
             } 
-            else if (eventTarget.className.includes('start') && !eventTarget.className.includes('disabled')) {
-                startGame()
+        else if (eventTarget.className.includes('button') && eventTarget.className.includes('stopped')) {
+
+                generateGame()
+
+                startGame()                
             } 
-            else if (eventTarget.className.includes('stop') && !eventTarget.className.includes('disabled')) {
+        else if (eventTarget.className.includes('button') && eventTarget.className.includes('started')) {
+
                 stopGame()
             }
         })
 }
+
 
 generateGame()
 
