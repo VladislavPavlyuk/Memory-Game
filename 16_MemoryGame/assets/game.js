@@ -84,11 +84,13 @@ const generateGame = () => {
 }
 
 const stopGame = () => {
+
     state.gameStarted = false
     selectors.start.classList.add('enabled')
     selectors.stop.classList.add('disabled')
 
-    card.classList.add('flipped');
+    flipBackAllCards();   
+
 }
 
 const startGame = () => {
@@ -108,9 +110,17 @@ const flipBackCards = () => {
     document.querySelectorAll('.card-main:not(.matched)').forEach(card => {
         card.classList.remove('flipped')
     })
-
     state.flippedCards = 0
 }
+
+const flipBackAllCards = () => {
+    document.querySelectorAll('.card-main').forEach(card => {
+        card.classList.add('flipped')
+    })
+    state.flippedCards = 16
+}
+
+
 
 const flipCard = card => {
     state.flippedCards++
@@ -125,6 +135,7 @@ const flipCard = card => {
     }
 
     if (state.flippedCards === 2) {
+
         const flippedCards = document.querySelectorAll('.flipped:not(.matched)')
 
         if (flippedCards[0].innerHTML === flippedCards[1].innerHTML) {
@@ -169,11 +180,13 @@ const attachEventListeners = () => {
 
         if (eventTarget.className.includes('card') && !eventParent.className.includes('flipped')) {
             flipCard(eventParent)
-        } else if (eventTarget.className.includes('start') && !eventTarget.className.includes('disabled')) {
-            startGame()
-        } else if (eventTarget.className.includes('stop') && !eventTarget.className.includes('enabled')) {
-            stopGame()
-        }
+            } 
+            else if (eventTarget.className.includes('start') && !eventTarget.className.includes('disabled')) {
+                startGame()
+            } 
+            else if (eventTarget.className.includes('stop') && !eventTarget.className.includes('disabled')) {
+                stopGame()
+            }
         })
 }
 
